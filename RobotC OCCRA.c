@@ -1,4 +1,6 @@
-#pragma config(Sensor, dgtl1,  ,               sensorQuadEncoder)
+#pragma config(Sensor, dgtl1,  HighLimitSwitch, sensorTouch)
+#pragma config(Sensor, dgtl2,  LowLimitSwitch, sensorTouch)
+#pragma config(Sensor, dgtl3,  EndeffectorLimitSwitch, sensorTouch)
 #pragma config(Motor,  port1,           LeftMotor,     tmotorVex393HighSpeed, openLoop)
 #pragma config(Motor,  port2,           RightMotor,    tmotorVex393HighSpeed, openLoop)
 #pragma config(Motor,  port3,           ArmMotor,      tmotorVex393, openLoop)
@@ -13,6 +15,9 @@ task main()
 	float drivePowerY;
 
 	float armPower;
+	bool armPosition = false;
+
+	float endEffectorPower;
 
 	while(true)
 	{
@@ -31,8 +36,37 @@ task main()
 		motor[LeftMotor] = speedMultiplier*((drivePowerY + drivePowerX)/2);
 		motor[RightMotor] = speedMultiplier*((drivePowerY - drivePowerX)/2);
 
-		armPower = 0.6*vexRT[Ch2Xmtr2];
+		/*if(vexRT[Btn6UXmtr2] == 1 && armPosition)
+		{
+			armPower = -.6;
+			if(SensorValue(LowLimitSwitch) == 1)
+			{
+			armPosition = false;
+			}
+		}
+		else if(vexRTBtn6UXmtr2] == 1 && !armPosition)
+		{
+			armPower = .6;
+			if(SensorValue(HighLimitSwitch) == 1)
+			{
+			armPosition = true;
+			}
+		}
+		else
+		{
+			armPower = 0
+		}*/
 
+		if(vexRT[BtnXmrt6D] == 1)
+		{
+			armPower = 0.6*vexRT[Ch2Xmtr2];
+		}
 		motor[ArmMotor] = armPower;
+
+		//Sensor test code
+		if(SensorValue(EndeffectorLimitSwitch) == 1)
+		{
+			motor[LeftMotor] = .6;
+		}
 	}
 }
