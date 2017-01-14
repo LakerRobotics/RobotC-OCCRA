@@ -32,27 +32,40 @@ task main()
 			speedMultiplier = 0.7;
 		}
 
-		drivePowerX = vexRT[Ch1];
-		drivePowerY = vexRT[Ch2];
+		drivePowerX = vexRT[Ch4];
+		drivePowerY = vexRT[Ch3];
 
 		motor[LeftMotor] = speedMultiplier*((drivePowerY + drivePowerX)/2);
 		motor[RightMotor] = speedMultiplier*((drivePowerY - drivePowerX)/2);
 
 		//Operator controls
 		//Arm
-		if(vexRT[Btn6UXmtr2] == 1)
+		armPower = vexRT[Ch2Xmtr2];
+
+		if(armPower > 40 || armPower < -40)
 		{
-			armPower = vexRT[Ch2Xmtr2];
+			motor[ArmMotor] = armMultiplier*armPower;
 		}
 		else
 		{
-			armPower = 0;
+			motor[ArmMotor] = 0;
 		}
 
-		motor[ArmMotor] = armMultiplier*armPower;
-
 		//Conveyor
-		if(vexRT[Btn5UXmtr2] == 1)
+		endEffectorPower = vexRT[Ch3Xmtr2];
+
+		if(endEffectorPower > 20 || endEffectorPower < -20)
+		{
+			motor[LeftEndeffectorMotor] = endEffectorMultiplier*endEffectorPower;
+			motor[RightEndeffectorMotor] = endEffectorMultiplier*endEffectorPower;
+		}
+		else
+		{
+			motor[LeftEndeffectorMotor] = 0;
+			motor[RightEndeffectorMotor] = 0;
+		}
+
+	/*if(vexRT[Btn5UXmtr2] == 1)
 		{
 			endEffectorPower = 127;
 		}
@@ -63,10 +76,8 @@ task main()
 		else
 		{
 			endEffectorPower = 0;
-		}
+		}*/
 
-		motor[LeftEndeffectorMotor] = endEffectorMultiplier*endEffectorPower;
-		motor[RightEndeffectorMotor] = endEffectorMultiplier*endEffectorPower;
 
 		/*if(vexRT[Btn6UXmtr2] == 1 && armPosition)
 		{
